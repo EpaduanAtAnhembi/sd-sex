@@ -3,6 +3,7 @@ package client;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args) {
@@ -21,14 +22,19 @@ public class Client {
         }
 
         String message = "Oba, funcionou!";
-        dados = message.getBytes();
-        pacote = new DatagramPacket(dados, dados.length, address, PORT);
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
 
-        try {
-            socket.send(pacote);
-            System.out.println("Dados enviados.");
-        } catch (Exception e) {
-            System.out.println("Erro ao enviar");
+            try {
+                System.out.println("Digite a mensagem:");
+                message = scanner.nextLine();
+                dados = message.getBytes();
+                pacote = new DatagramPacket(dados, dados.length, address, PORT);
+                socket.send(pacote);
+                System.out.println("Dados enviados.");
+            } catch (Exception e) {
+                System.out.println("Erro ao enviar");
+            }
         }
     }
 }
