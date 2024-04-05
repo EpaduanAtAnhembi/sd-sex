@@ -23,7 +23,7 @@ public class Client {
 
         String message = "Oba, funcionou!";
         Scanner scanner = new Scanner(System.in);
-        while (true) {
+        while (!message.equalsIgnoreCase("exit")) {
 
             try {
                 System.out.println("Digite a mensagem:");
