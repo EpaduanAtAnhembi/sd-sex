@@ -16,7 +16,13 @@ public class Servidor {
 
         try {
             serverSocket = new ServerSocket(PORT);
-            
+
+            while (true) {
+                System.out.println("Aguardando o cliente...");
+                cliente = serverSocket.accept();
+                Atende atende = new Atende(cliente);
+                atende.start();
+            }
 
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
