@@ -17,6 +17,7 @@ public class Cliente extends javax.swing.JFrame {
     Socket socket;
     ObjectOutputStream out;
     Escuta escuta;
+    String nomeUsuario;
 
     /**
      * Creates new form Cliente
@@ -35,7 +36,7 @@ public class Cliente extends javax.swing.JFrame {
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tab = new javax.swing.JTabbedPane();
         jInternalFrame1 = new javax.swing.JInternalFrame();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -122,7 +123,7 @@ public class Cliente extends javax.swing.JFrame {
                                 .addComponent(btnConectar)
                                 .addContainerGap(67, Short.MAX_VALUE)));
 
-        jTabbedPane1.addTab("Servidor", jInternalFrame1);
+        tab.addTab("Servidor", jInternalFrame1);
 
         jInternalFrame2.setVisible(true);
 
@@ -159,25 +160,26 @@ public class Cliente extends javax.swing.JFrame {
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(7, Short.MAX_VALUE)));
 
-        jTabbedPane1.addTab("Chat", jInternalFrame2);
+        tab.addTab("Chat", jInternalFrame2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jTabbedPane1));
+                        .addComponent(tab));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jTabbedPane1));
+                        .addComponent(tab));
 
         pack();
     }
 
     private void txtEntradaKeyPressed(java.awt.event.KeyEvent evt) {
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            Mensagem msg = new Mensagem("Eu", txtEntrada.getText());
+            Mensagem msg = new Mensagem(nomeUsuario, txtEntrada.getText());
             try {
                 out.writeObject(msg);
+                txtEntrada.setText("");
             } catch (IOException e) {
                 System.out.println("Erro: " + e.getMessage());
             }
@@ -187,11 +189,16 @@ public class Cliente extends javax.swing.JFrame {
     private void btnConectarActionPerformed(java.awt.event.ActionEvent evt) {
         String ip = txtIP.getText();
         int port = Integer.parseInt(txtPorta.getText());
+        nomeUsuario = txtUsuario.getText();
 
         try {
             socket = new Socket(ip, port);
             out = new ObjectOutputStream(socket.getOutputStream());
-
+            Escuta escuta = new Escuta(socket, txtHistorico);
+            escuta.start();
+            tab.setSelectedIndex(1);
+            tab.setEnabled(false);
+            txtHistorico.setEnabled(false);
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
         }
@@ -244,7 +251,7 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane tab;
     private javax.swing.JTextField txtEntrada;
     private javax.swing.JTextArea txtHistorico;
     private javax.swing.JTextField txtIP;

@@ -19,6 +19,10 @@ public class Atende extends Thread {
         comunicacao = new Comunicacao(cliente);
     }
 
+    public void sendMsg(Mensagem msg) {
+        comunicacao.send(msg);
+    }
+
     @Override
     public void run() {
         boolean online = true;
@@ -28,9 +32,15 @@ public class Atende extends Thread {
             if(msg == null) {
                 online = false;
             } else {
-                System.out.println(msg.getTexto());
+                // for (int i = 0; i < Servidor.atendentes.size(); i++) {
+                //     Servidor.atendentes.get(i).sendMsg(msg);
+                // }
+                for (Atende atende : Servidor.atendentes) {
+                    atende.sendMsg(msg);
+                }
             }
         }
         System.out.println("Final da thread");
+        Servidor.atendentes.remove(this);
     }
 }

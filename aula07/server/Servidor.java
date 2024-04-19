@@ -2,12 +2,14 @@ package server;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  *
  * @author Emerson S. Paduan <emerson@paduan.dev.br>
  */
 public class Servidor {
+    protected static ArrayList<Atende> atendentes = new ArrayList<>();
 
     public static void main(String[] args) {
         final int PORT = 9876;
@@ -21,6 +23,7 @@ public class Servidor {
                 System.out.println("Aguardando o cliente...");
                 cliente = serverSocket.accept();
                 Atende atende = new Atende(cliente);
+                atendentes.add(atende);
                 atende.start();
             }
 
