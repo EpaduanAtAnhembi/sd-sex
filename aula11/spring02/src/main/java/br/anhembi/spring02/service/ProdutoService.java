@@ -28,6 +28,10 @@ public class ProdutoService {
         if(produto.getCodigo() == 0) {
             return null;
         }
+        Optional<Produto> optinal = repo.findById(produto.getCodigo());
+        if(optinal.isEmpty()) {
+            return null;
+        }
         return repo.save(produto);
     }
 
